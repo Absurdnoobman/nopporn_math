@@ -12,7 +12,6 @@ Enter the following option:
 			2: Nopporn's Statistics
 			3: Area
 				""");
-
 		switch (opt) {
 		case 0:
 			print("Exiting");
