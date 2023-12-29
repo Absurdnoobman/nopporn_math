@@ -6,7 +6,7 @@ class NoppornMath {}
 class BasicArithmetic extends NoppornMath {
     static num add(num x, num y) {
         if (x + y > double.maxFinite) {
-        throw Exception("OverflowError");
+            throw Exception("OverflowError");
         }
         return x + y;
     }
@@ -21,7 +21,7 @@ class NoppornStatistics extends NoppornMath {
         num sum = 0;
         int numberOfElements = 0;
         for (num element in list) {
-        sum += element;
+            sum += element;
         }
         numberOfElements = list.length;
         num result = sum / numberOfElements;
@@ -53,16 +53,16 @@ class NoppornStatistics extends NoppornMath {
         List<num> otherNum = [];
         num? mod ;
         for(num element in list ) {
-        if (otherNum.contains(element)){
-            repeatNum.add(element);
-        } else {
-            otherNum.add(element);
-        }
+            if (otherNum.contains(element)){
+                repeatNum.add(element);
+            } else {
+                otherNum.add(element);
+            }
         }
         if(repeatNum.length > 1 || repeatNum.isEmpty){
-        return mod;
+            return mod;
         } else {
-        mod = repeatNum[0];
+            mod = repeatNum[0];
         }
         return mod;
     }
@@ -72,7 +72,7 @@ class Area extends NoppornMath{
     static circleArea(num radius){
         num area;
         try{
-        area = radius * radius * pi;
+            area = radius * radius * pi;
         }
         catch (e){
            rethrow;
@@ -82,7 +82,7 @@ class Area extends NoppornMath{
     static circleCircum(num radius){
         num circum;
         try{
-        circum = 2 * radius * pi;
+            circum = 2 * radius * pi;
         }
         catch (e){
             rethrow;

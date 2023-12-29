@@ -89,8 +89,76 @@ void noppornMode(){
 	result['avr'] = nopporn.NoppornStatistics.average(data);
     result['med'] = nopporn.NoppornStatistics.median(data);
     result['mod'] = nopporn.NoppornStatistics.mod(data);
-    bool ans = yesOrNo("Is Q D P require?");
-    if(ans){
+    bool qdrNeeded = yesOrNo("Is Q D P require?");
+    if(qdrNeeded){
+        print(
+            """
+    Please enter the quadtile(Qr) or dectile(Dr) or percentile(Pr) in the following format:
+
+    for Quadtile => Q_n ; n is the position of quadtile or nth Quadtile and 0 < n <= 4 must be true or meaning n must be greater than 0 and less than 5 EX. Q_4 mean 4th Quadtile
+    for Dectile => D_n; n is the position of dectile or nth dectile and 0 < n <= 10 must be true or meaning n must be greater than 0 and less than 11 EX. D_6 mean 6th Dectile
+    for percentile => P_n; n is the position of percentile or nth percentile and 0 < n <= 100 must be true or meaning n must be greater than 0 and less than 101 EX. P_69 mean 69th Percentile
+
+    Can enter multiple value.
+    Ex. Q_2 P_45 D_3 Q_3 
+            """
+        );
+        while(true){
+            List<String> input = inputListStr(
+                "Enter the data:", 
+                ' '
+            );
+        
+            Map<String, int> dataQDP = {};
+            for(String element in input){
+                List<String> seperated = element.split('_');
+                if( !(RegExp(r'[QDP]').hasMatch(seperated[0])) ){
+                    print("${seperated[0]} is invalid format");
+                    break;
+                }
+                if( !(RegExp(r'\d+').hasMatch(seperated[1])) ){
+                    print("${seperated[1]} is invalid format");
+                    break;
+                } else {
+                    int? n = int.tryParse(seperated[1]);
+                    if(n == null){
+                        print("Can not covert '${seperated[1]}' to integer");
+                        break;
+                    } else {
+                        switch(seperated[0]){
+                            case 'Q':
+                                if(0 < n && n < 5){
+                                    dataQDP[seperated[0]] = n;
+                                    continue;
+                                } else {
+                                    print("n must be  within 1 to 4");
+                                    break;
+                                }
+                            case 'D':
+                                if(0 < n && n < 11){
+                                    dataQDP[seperated[0]] = n;
+                                    continue;
+                                } else {
+                                    print("n must be  within 1 to 10");
+                                    break;
+                                }
+                            case 'P':
+                                if(0 < n && n < 101){
+                                    dataQDP[seperated[0]] = n;
+                                    continue;
+                                } else {
+                                    print("n must be  within 1 to 100");
+                                    break;
+                                }
+                            default:
+                                print("${seperated[0]} is invalid format");
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+        
         
         return;
     } else {
@@ -125,21 +193,43 @@ List<num> inputListNumber(String msg) {
 		print("Enter any character to terminate");
 		String? value = stdin.readLineSync();
 		if (value == null || value == "") {
-		print("Unexpected empty String");
-		continue;
+            print("Unexpected empty String");
+            continue;
 		} else {
-		num? result = num.tryParse(value);
-		if (result == null) {
-			if (data.isEmpty) {
-			print("List can not be empty");
-			continue;
-			} else {
-			break;
-			}
-		} else {
-			data.add(result);
-			continue;
+            num? result = num.tryParse(value);
+            if (result == null) {
+                if (data.isEmpty) {
+                    print("List can not be empty");
+                    continue;
+                } else {
+                    break;
+                }
+            } else {
+                data.add(result);
+                continue;
+            }
 		}
+	}
+	return data;
+}
+
+List<String> inputListStr(String msg, String sprBy) {
+	List<String> data = [];
+	while (true) {
+		print(msg);
+        print("Each element is seperated by '$sprBy'");
+		print("Press 'Enter' to comfirm");
+		String? value = stdin.readLineSync();
+		if (value == null || value == "") {
+            print("Unexpected empty String");
+            continue;
+		} else {
+            try {
+                data = value.split(sprBy);
+            } catch (e) {
+                rethrow;
+            }
+            break;
 		}
 	}
 	return data;
@@ -198,14 +288,20 @@ bool yesOrNo(String msg){
         String? value = stdin.readLineSync();
         if(value == null){
             print("Unexpected empty string");
+            print("Enter 'y' for affirmative or n for'negative'");
             continue;
         } else {
             switch(value){
-                case "Yes"|| "yes" || 'y' || 'Y' || 'yep' || 'Yep' || "YES" :
+                case "Yes"|| "yes" || 'y' || 'Y' || 'yep' || 'Yep' || "YES" || "Aye":
                     return true;
-                case "No" || "no" || 'n' || 'N' || 'nop' || 'Nop' || 'NO' :
+                case "No" || "no" || 'n' || 'N' || 'nop' || 'Nop' || 'NO' || "Fuck it":
                     return false;
+                case "Fuck" || "fuck":
+                    print("Unexpected reproduction!!! T_T");
+                    print("Enter 'y' for affirmative or n for'negative'");
+                    continue;
                 default:
+                    print("Unexpected $value");
                     print("Enter 'y' for affirmative or n for'negative'");
                     continue;
             }
